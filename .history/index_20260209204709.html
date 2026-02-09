@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ألعاب الثقافة العامة في الإعلامية</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">💻🎮</div>
+      <div>
+        <h1>ألعاب الثقافة العامة في الإعلامية</h1>
+        <p class="subtitle">موقع تفاعلي للمنافسة والعرض (Offline)</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn ghost" id="btnFullscreen" title="ملء الشاشة">⛶ ملء الشاشة</button>
+      <button class="btn ghost" id="btnHome" title="العودة للرئيسية">🏠 الرئيسية</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main id="app" class="app" aria-live="polite"></main>
+    <aside id="scoreboard" class="scoreboard" aria-label="لوحة الترتيب"></aside>
+  </div>
+
+  <div id="overlay" class="overlay hidden" aria-hidden="true"></div>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true"></div>
+
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <!-- بيانات الألعاب -->
+  <script src="data.js"></script>
+  <!-- منطق التطبيق -->
+  <script src="app.js"></script>
+</body>
+</html>
