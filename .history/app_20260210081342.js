@@ -920,12 +920,35 @@
 
     const optsEl = $("#options");
     const feedbackEl = $("#feedback");
-   
-   let locked = !!qState.locked;
+    const totalSec = qState.options.secondsPerQuestion;
 
-   
+    let locked = false;
+    let timerId = null;
+    let deadline = Date.now() + totalSec * 1000;
+    let lastMsRemaining = totalSec * 1000;
 
-  
+    function updateTimer() {
+      const ms = Math.max(0, deadline - Date.now());
+      lastMsRemaining = ms;
+
+      const ratio = ms / (totalSec * 1000);
+      const width = Math.max(0, Math.min(100, ratio * 100));
+      $("#timerFill").style.width = width + "%";
+
+      const secLeft = Math.ceil(ms / 1000);
+      $("#timerText").textContent = `⏱️ ${secLeft}s`;
+
+      if (ms <= 0) {
+        clearInterval(timerId);
+        timerId = null;
+        onAnswer(null, true); // timeout
+      }
+    }
+
+    function stopTimer() {
+      if (timerId) clearInterval(timerId);
+      timerId = null;
+    }
 
     function setOptionsDisabled(disabled) {
       $$(".option").forEach(b => b.disabled = disabled);
@@ -942,8 +965,7 @@
     }
 
     function onAnswer(chosenIndex) {
-  if (qState.locked) return;
-
+  if (locked) return;
   locked = true;
   qState.locked = true;
 
@@ -978,7 +1000,6 @@
     qState.index++;
     qState.turnPlayerId = (activeId === r.p1Id) ? r.p2Id : r.p1Id;
     qState.locked = false;
-    locked = false;
 
     if (qState.index >= total) finishQuiz();
     else renderQuiz();
@@ -989,8 +1010,7 @@
     $$(".option").forEach(btn => {
       btn.addEventListener("click", () => {
         const chosen = parseInt(btn.getAttribute("data-idx"), 10);
-        onAnswer(chosen);
-
+        onAnswer(chosen, false);
       });
     });
 
@@ -1007,11 +1027,11 @@
     document.addEventListener("keydown", onKey);
 
     // Start timer
-   
-    
+    updateTimer();
+    timerId = setInterval(updateTimer, 120);
 
     activeCleanup = () => {
-      
+      stopTimer();
       document.removeEventListener("keydown", onKey);
     };
   }

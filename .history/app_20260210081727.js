@@ -921,7 +921,6 @@
     const optsEl = $("#options");
     const feedbackEl = $("#feedback");
    
-   let locked = !!qState.locked;
 
    
 
@@ -942,8 +941,7 @@
     }
 
     function onAnswer(chosenIndex) {
-  if (qState.locked) return;
-
+  if (locked) return;
   locked = true;
   qState.locked = true;
 
@@ -978,7 +976,6 @@
     qState.index++;
     qState.turnPlayerId = (activeId === r.p1Id) ? r.p2Id : r.p1Id;
     qState.locked = false;
-    locked = false;
 
     if (qState.index >= total) finishQuiz();
     else renderQuiz();
